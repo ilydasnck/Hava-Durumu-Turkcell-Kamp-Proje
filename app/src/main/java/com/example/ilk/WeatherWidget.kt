@@ -1,6 +1,7 @@
 package com.example.ilk
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,9 +40,10 @@ class WeatherWidget : GlanceAppWidget() {
                 tempStr = "${cw.temperature.toInt()}°C"
                 weatherCode = cw.weathercode ?: 0
                 conditionText = parseWeatherCodeToText(weatherCode)
+                Log.d("WeatherWidget", "Fetched weather for $defaultCityName: $tempStr, $conditionText")
             }
-        } catch (_: Exception) {
-            // fallback
+        } catch (e: Exception) {
+            Log.e("WeatherWidget", "Error fetching weather for widget: ${e.message}", e)
         }
 
         val weatherEmoji = when (weatherCode) {
@@ -118,7 +120,7 @@ class WeatherWidget : GlanceAppWidget() {
 class WeatherWidgetProvider : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = WeatherWidget()
 }
-// Alias for receiver defined in Manifest if needed
+
 class WeatherWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = WeatherWidget()
 }

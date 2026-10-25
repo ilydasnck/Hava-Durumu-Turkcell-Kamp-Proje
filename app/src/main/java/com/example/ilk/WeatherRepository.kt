@@ -159,7 +159,7 @@ class WeatherRepository {
                     hourly = HourlyWeatherDetail(
                         time = List(24) { String.format("%02d:00", it) },
                         temperature2m = List(24) { cw.temperature + (it % 3 - 1) },
-                        relativeHumidity2m = List(24) { 50 + (it % 10) },
+                        relativeHumidity2m = List(24) { (50 + (it % 10)).toDouble() },
                         weathercode = List(24) { realCode }
                     ),
                     daily = DailyWeatherDetail(

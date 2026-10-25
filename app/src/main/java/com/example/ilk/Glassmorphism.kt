@@ -12,121 +12,211 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
- * Tema ve Hava Koşullarına Göre Değişen Akışkan Gradientler (Dark & Light Mode Desteği):
+ * Modern hava durumu gradientleri — iOS Weather tarzı, her durum için belirgin renk.
+ * isDay artık her zaman true olarak gelecek (gece modu kapalı).
  */
 fun getWeatherGradient(weatherCode: Int, isDay: Boolean = true, isDarkTheme: Boolean = true): Brush {
-    if (!isDarkTheme) {
-        // Açık Tema (Light Mode) Ferah Gökyüzü Gradientleri
-        return when (weatherCode) {
-            0 -> Brush.verticalGradient(
-                colors = listOf(
-                    Color(0xFF38BDF8), // Parlak Gündüz Mavisı
-                    Color(0xFF7DD3FC), // Yumuşak Mavi
-                    Color(0xFFF0F9FF)  // Açık Beyazımsı Zemin
-                )
-            )
-            in 51..82 -> Brush.verticalGradient(
-                colors = listOf(
-                    Color(0xFF64748B), // Slate Yağmur Grisi
-                    Color(0xFF94A3B8),
-                    Color(0xFFF1F5F9)
-                )
-            )
-            else -> Brush.verticalGradient(
-                colors = listOf(
-                    Color(0xFF7DD3FC),
-                    Color(0xFFBAE6FD),
-                    Color(0xFFF8FAFC)
-                )
-            )
-        }
+    return if (isDarkTheme) {
+        getDarkGradient(weatherCode)
+    } else {
+        getLightGradient(weatherCode)
     }
+}
 
-    // Koyu Tema (Dark Mode) Gradientleri
+private fun getDarkGradient(weatherCode: Int): Brush {
     return when (weatherCode) {
-        0 -> if (isDay) {
-            Brush.verticalGradient(
-                colors = listOf(
-                    Color(0xFFD97706),
-                    Color(0xFFB45309),
-                    Color(0xFF0F172A)
-                )
-            )
-        } else {
-            Brush.verticalGradient(
-                colors = listOf(
-                    Color(0xFF0A1128),
-                    Color(0xFF1C2541),
-                    Color(0xFF000814)
-                )
-            )
-        }
-
-        1, 2 -> if (isDay) {
-            Brush.verticalGradient(
-                colors = listOf(
-                    Color(0xFF0284C7),
-                    Color(0xFF0369A1),
-                    Color(0xFF0C4A6E)
-                )
-            )
-        } else {
-            Brush.verticalGradient(
-                colors = listOf(
-                    Color(0xFF0A1128),
-                    Color(0xFF1C2541),
-                    Color(0xFF000814)
-                )
-            )
-        }
-
-        3, 45, 48 -> Brush.verticalGradient(
+        // Güneşli / Açık — Modern derin gökyüzü mavisi (iOS Weather stili)
+        0 -> Brush.verticalGradient(
             colors = listOf(
-                Color(0xFF334155),
-                Color(0xFF1E293B),
-                Color(0xFF0F172A)
+                Color(0xFF0A2744), // Çok derin gece mavisi üst
+                Color(0xFF1A5276), // Derin okyanus mavisi
+                Color(0xFF2980B9)  // Canlı gök mavisi
             )
         )
 
-        in 51..82 -> Brush.verticalGradient(
+        // Hafif Bulutlu — Biraz daha açık mavi
+        1 -> Brush.verticalGradient(
             colors = listOf(
-                Color(0xFF1E1B4B),
-                Color(0xFF312E81),
-                Color(0xFF0F172A)
+                Color(0xFF0D3B6E),
+                Color(0xFF1F618D),
+                Color(0xFF2E86C1)
             )
         )
 
-        in 71..86 -> Brush.verticalGradient(
+        // Parçalı Bulutlu — Orta koyu mavi-gri karışımı
+        2 -> Brush.verticalGradient(
             colors = listOf(
-                Color(0xFF0891B2),
-                Color(0xFF0E7490),
-                Color(0xFF164E63)
+                Color(0xFF17202A),
+                Color(0xFF1F3044),
+                Color(0xFF2C4770)
             )
         )
 
+        // Çok Bulutlu / Kapalı — Belirgin kurşuni gri
+        3 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF1C2833),
+                Color(0xFF2E4057),
+                Color(0xFF424F5C)
+            )
+        )
+
+        // Sisli — Koyu teal-gri
+        45, 48 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF0E3840),
+                Color(0xFF1A5C5C),
+                Color(0xFF117A65)
+            )
+        )
+
+        // Çisenti / Hafif Yağmur
+        in 51..55 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF1A237E),
+                Color(0xFF283593),
+                Color(0xFF3949AB)
+            )
+        )
+
+        // Dondurucu Çisenti
+        in 56..57 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF0D2137),
+                Color(0xFF0C3547),
+                Color(0xFF0A6070)
+            )
+        )
+
+        // Yağmur — Koyu kobalt
+        in 61..67 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF0D1B3E),
+                Color(0xFF1A2F6E),
+                Color(0xFF1B4FAF)
+            )
+        )
+
+        // Sağanak Yağmur — Daha koyu
+        in 80..82 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF060D1E),
+                Color(0xFF0D1B3E),
+                Color(0xFF1A2F6E)
+            )
+        )
+
+        // Kar — Buzul mavisi
+        in 71..77 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF0B2545),
+                Color(0xFF0A4C6A),
+                Color(0xFF0D7F9F)
+            )
+        )
+
+        // Kar Sağanağı
+        in 85..86 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF0A2535),
+                Color(0xFF0E6E8A),
+                Color(0xFF48CAE4)
+            )
+        )
+
+        // Fırtına / Şimşek — Derin mor
         in 95..99 -> Brush.verticalGradient(
             colors = listOf(
-                Color(0xFF581C87),
+                Color(0xFF0D0221),
                 Color(0xFF3B0764),
-                Color(0xFF0F172A)
+                Color(0xFF6B21A8)
             )
         )
 
         else -> Brush.verticalGradient(
             colors = listOf(
-                Color(0xFF0F172A),
-                Color(0xFF1E293B),
-                Color(0xFF020617)
+                Color(0xFF0A2744),
+                Color(0xFF1A5276),
+                Color(0xFF2980B9)
             )
         )
     }
 }
 
-// Cam Biçimi (Glassmorphism) Efekti Modifier'ı
+private fun getLightGradient(weatherCode: Int): Brush {
+    return when (weatherCode) {
+        // Güneşli: Gökyüzü mavisi — sarı yok
+        0 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF1565C0),
+                Color(0xFF1E88E5),
+                Color(0xFF64B5F6)
+            )
+        )
+        1 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF1976D2),
+                Color(0xFF42A5F5),
+                Color(0xFFBBDEFB)
+            )
+        )
+        2 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF455A64),
+                Color(0xFF78909C),
+                Color(0xFFB0BEC5)
+            )
+        )
+        3 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF37474F),
+                Color(0xFF607D8B),
+                Color(0xFFCFD8DC)
+            )
+        )
+        45, 48 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF00695C),
+                Color(0xFF26A69A),
+                Color(0xFFB2DFDB)
+            )
+        )
+        in 51..67, in 80..82 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF1565C0),
+                Color(0xFF42A5F5),
+                Color(0xFFBBDEFB)
+            )
+        )
+        in 71..77, in 85..86 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF0277BD),
+                Color(0xFF29B6F6),
+                Color(0xFFE1F5FE)
+            )
+        )
+        in 95..99 -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF4527A0),
+                Color(0xFF7E57C2),
+                Color(0xFFEDE7F6)
+            )
+        )
+        else -> Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF1565C0),
+                Color(0xFF42A5F5),
+                Color(0xFFBBDEFB)
+            )
+        )
+    }
+}
+
+// Cam Efekti (Glassmorphism) Modifier
 fun Modifier.glassmorphism(
     cornerRadius: Dp = 24.dp,
-    backgroundColor: Color = Color.White.copy(alpha = 0.08f),
-    borderColor: Color = Color.White.copy(alpha = 0.15f),
+    backgroundColor: Color = Color.White.copy(alpha = 0.10f),
+    borderColor: Color = Color.White.copy(alpha = 0.20f),
     borderWidth: Dp = 1.dp
 ): Modifier = this
     .clip(RoundedCornerShape(cornerRadius))

@@ -1,6 +1,7 @@
 package com.example.ilk
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -38,7 +39,7 @@ fun CityListScreen(
 ) {
     val context = LocalContext.current
     val onboardingManager = remember { OnboardingManager(context) }
-    val defaultCityName = remember { onboardingManager.getDefaultCity() }
+    var defaultCityName by remember { mutableStateOf(onboardingManager.getDefaultCity()) }
 
     val repository = remember { WeatherRepository() }
     var cityList by remember { mutableStateOf(repository.getTurkishCities()) }
@@ -46,42 +47,67 @@ fun CityListScreen(
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var selectedCityName by rememberSaveable(defaultCityName) { mutableStateOf<String?>(defaultCityName) }
     
-    // Ekran döndüğünde kullanıcının bulunduğu sayfada kalmasını sağlayan rememberSaveable
+    // Uygulama varsayılan şehrin detay ekranıyla başlar
     var selectedCityDetailName by rememberSaveable { mutableStateOf<String?>(defaultCityName) }
     
     var showSettingsScreen by remember { mutableStateOf(false) }
     var isNetworkError by remember { mutableStateOf(false) }
 
-    // Ayarlar ekranından dönüldüğünde şehir listesi ekranında kal
-    LaunchedEffect(showSettingsScreen, defaultCityName) {
-        if (!showSettingsScreen) {
-            selectedCityDetailName = null
-            selectedCityName = defaultCityName
-        }
-    }
-
     val isDarkTheme = MaterialTheme.colorScheme.background.luminance() < 0.5f
 
     // Eğer ayarlar ekranı açıksa onu göster
     if (showSettingsScreen) {
+        BackHandler {
+            defaultCityName = onboardingManager.getDefaultCity()
+            showSettingsScreen = false
+        }
         SettingsScreen(
-            onBackClick = { showSettingsScreen = false },
+            onBackClick = {
+                defaultCityName = onboardingManager.getDefaultCity()
+                showSettingsScreen = false
+            },
             onThemeChanged = onThemeChanged
         )
         return
     }
 
     val finalCityForDetail = remember(selectedCityDetailName, cityList) {
-        if (selectedCityDetailName == null) null else cityList.find { it.cityName == selectedCityDetailName }
+        if (selectedCityDetailName == null) {
+            null
+        } else {
+            cityList.find { it.cityName.equals(selectedCityDetailName, ignoreCase = true) }
+                ?: repository.getCityCoordinates(selectedCityDetailName!!)?.let { coords ->
+                    CityWeather(
+                        cityName = coords.name,
+                        latitude = coords.latitude,
+                        longitude = coords.longitude,
+                        temperature = "...",
+                        condition = "Yükleniyor...",
+                        isLoading = true
+                    )
+                }
+        }
     }
 
     // Eğer detay ekranı aktifse o şehri göster
     if (finalCityForDetail != null) {
+        BackHandler {
+            if (selectedCityDetailName != defaultCityName) {
+                selectedCityDetailName = null
+            } else {
+                onBackClick()
+            }
+        }
         CityDetailScreen(
             city = finalCityForDetail,
             onOpenCityList = { selectedCityDetailName = null }
         )
         return
+    }
+
+    // Şehir listesi ekranındayken geri basıldığında varsayılan şehir detaylarına dön
+    BackHandler {
+        selectedCityDetailName = defaultCityName
     }
 
     // Arama filtreleme
@@ -127,7 +153,6 @@ fun CityListScreen(
                         }
                     },
                     actions = {
-                        // Ayarlar İkonu
                         IconButton(onClick = { showSettingsScreen = true }) {
                             Icon(
                                 imageVector = Icons.Default.Settings,
@@ -224,11 +249,11 @@ fun CityListScreen(
                                         isNetworkError = true
                                     } else {
                                         cityList = cityList.map {
-                                            if (it.cityName == city.cityName) {
-                                                it.copy(temperature = temp, condition = condition, isLoading = false)
-                                            } else {
-                                                it
-                                            }
+                                             if (it.cityName == city.cityName) {
+                                                 it.copy(temperature = temp, condition = condition, isLoading = false)
+                                             } else {
+                                                 it
+                                             }
                                         }
                                     }
                                 }

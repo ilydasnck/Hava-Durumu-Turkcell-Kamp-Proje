@@ -17,8 +17,8 @@ interface WeatherApi {
         @Query("latitude") lat: Double,
         @Query("longitude") lon: Double,
         @Query("current_weather") currentWeather: Boolean = true,
-        @Query("hourly") hourly: String = "temperature_2m,relative_humidity_2m",
-        @Query("daily") daily: String = "temperature_2m_max,temperature_2m_min",
+        @Query("hourly") hourly: String = "temperature_2m,relative_humidity_2m,weather_code",
+        @Query("daily") daily: String = "temperature_2m_max,temperature_2m_min,weather_code",
         @Query("timezone") timezone: String = "auto"
     ): WeatherDetailResponse
 }
@@ -48,19 +48,19 @@ data class CurrentWeatherDetail(
     @SerializedName("windspeed") val windspeed: Double?,
     @SerializedName("winddirection") val winddirection: Double?,
     @SerializedName("weathercode", alternate = ["weather_code"]) val weathercode: Int?,
-    @SerializedName("is_day", alternate = ["is_day"]) val isDay: Int?
+    @SerializedName("is_day") val isDay: Int?
 )
 
 data class HourlyWeatherDetail(
     @SerializedName("time") val time: List<String>?,
     @SerializedName("temperature_2m") val temperature2m: List<Double>?,
-    @SerializedName("relative_humidity_2m") val relativeHumidity2m: List<Int>?,
+    @SerializedName("relative_humidity_2m") val relativeHumidity2m: List<Double>?,
     @SerializedName("weathercode", alternate = ["weather_code"]) val weathercode: List<Int>?
 )
 
 data class DailyWeatherDetail(
     @SerializedName("time") val time: List<String>?,
     @SerializedName("weathercode", alternate = ["weather_code"]) val weathercode: List<Int>?,
-    @SerializedName("temperature_2m_max", alternate = ["temperature_2m_max", "temperature_2m_max"]) val tempMax: List<Double>?,
-    @SerializedName("temperature_2m_min", alternate = ["temperature_2m_min", "temperature_2m_min"]) val tempMin: List<Double>?
+    @SerializedName("temperature_2m_max") val tempMax: List<Double>?,
+    @SerializedName("temperature_2m_min") val tempMin: List<Double>?
 )
