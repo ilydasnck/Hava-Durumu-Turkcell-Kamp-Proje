@@ -108,6 +108,10 @@ class WeatherRepository {
         }
     }
 
+    fun getCityCoordinates(cityName: String): CityCoordinates? {
+        return turkishProvinces.find { it.name.equals(cityName, ignoreCase = true) }
+    }
+
     suspend fun fetchWeatherForCity(lat: Double, lon: Double): Pair<String, String> {
         return try {
             val response = ApiClient.forecastApi.getWeather(lat, lon)

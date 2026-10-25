@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,29 +38,29 @@ fun CityListScreen(
 ) {
     val context = LocalContext.current
     val onboardingManager = remember { OnboardingManager(context) }
-    
-    var showSettingsScreen by remember { mutableStateOf(false) }
-
-    // Ayarlar ekranından dönüldüğünde yeni varsayılan şehri anında al
-    val defaultCityName = remember(showSettingsScreen) {
-        onboardingManager.getDefaultCity()
-    }
+    val defaultCityName = remember { onboardingManager.getDefaultCity() }
 
     val repository = remember { WeatherRepository() }
     var cityList by remember { mutableStateOf(repository.getTurkishCities()) }
-    
-    val defaultCity = remember(cityList, defaultCityName) {
-        cityList.find { it.cityName == defaultCityName } ?: cityList.first()
-    }
 
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var selectedCityName by rememberSaveable(defaultCityName) { mutableStateOf<String?>(defaultCityName) }
     
-    // Varsayılan olarak başlangıçta veya ayarlardan dönüldüğünde detay ekranını açıyoruz
-    var selectedCityForDetail by remember(showSettingsScreen, defaultCityName) {
-        mutableStateOf<CityWeather?>(defaultCity)
-    }
+    // Ekran döndüğünde kullanıcının bulunduğu sayfada kalmasını sağlayan rememberSaveable
+    var selectedCityDetailName by rememberSaveable { mutableStateOf<String?>(defaultCityName) }
+    
+    var showSettingsScreen by remember { mutableStateOf(false) }
     var isNetworkError by remember { mutableStateOf(false) }
+
+    // Ayarlar ekranından dönüldüğünde şehir listesi ekranında kal
+    LaunchedEffect(showSettingsScreen, defaultCityName) {
+        if (!showSettingsScreen) {
+            selectedCityDetailName = null
+            selectedCityName = defaultCityName
+        }
+    }
+
+    val isDarkTheme = MaterialTheme.colorScheme.background.luminance() < 0.5f
 
     // Eğer ayarlar ekranı açıksa onu göster
     if (showSettingsScreen) {
@@ -70,11 +71,15 @@ fun CityListScreen(
         return
     }
 
-    // Eğer detay ekranı açıksa o şehri göster
-    if (selectedCityForDetail != null) {
+    val finalCityForDetail = remember(selectedCityDetailName, cityList) {
+        if (selectedCityDetailName == null) null else cityList.find { it.cityName == selectedCityDetailName }
+    }
+
+    // Eğer detay ekranı aktifse o şehri göster
+    if (finalCityForDetail != null) {
         CityDetailScreen(
-            city = selectedCityForDetail!!,
-            onOpenCityList = { selectedCityForDetail = null }
+            city = finalCityForDetail,
+            onOpenCityList = { selectedCityDetailName = null }
         )
         return
     }
@@ -84,13 +89,23 @@ fun CityListScreen(
         it.cityName.contains(searchQuery, ignoreCase = true)
     }
 
-    val mainGradient = Brush.verticalGradient(
-        colors = listOf(
-            Color(0xFF0F172A),
-            Color(0xFF1E293B),
-            Color(0xFF020617)
+    val mainGradient = if (isDarkTheme) {
+        Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFF0F172A),
+                Color(0xFF1E293B),
+                Color(0xFF020617)
+            )
         )
-    )
+    } else {
+        Brush.verticalGradient(
+            colors = listOf(
+                Color(0xFFF0F9FF),
+                Color(0xFFE0F2FE),
+                Color(0xFFBAE6FD)
+            )
+        )
+    }
 
     Box(
         modifier = Modifier
@@ -101,13 +116,13 @@ fun CityListScreen(
             containerColor = Color.Transparent,
             topBar = {
                 TopAppBar(
-                    title = { Text("Şehir Arama & Keşfet", color = Color.White) },
+                    title = { Text("Şehir Arama & Keşfet", color = if (isDarkTheme) Color.White else Color(0xFF0F172A)) },
                     navigationIcon = {
-                        IconButton(onClick = { selectedCityForDetail = defaultCity }) {
+                        IconButton(onClick = { selectedCityDetailName = defaultCityName }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Geri",
-                                tint = Color.White
+                                tint = if (isDarkTheme) Color.White else Color(0xFF0F172A)
                             )
                         }
                     },
@@ -117,17 +132,8 @@ fun CityListScreen(
                             Icon(
                                 imageVector = Icons.Default.Settings,
                                 contentDescription = "Ayarlar",
-                                tint = Color.White,
+                                tint = if (isDarkTheme) Color.White else Color(0xFF0F172A),
                                 modifier = Modifier.size(26.dp)
-                            )
-                        }
-                        // + Butonu (Diğer Şehirler)
-                        IconButton(onClick = { selectedCityForDetail = null }) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "Şehir Ekle / Ara",
-                                tint = Color.White,
-                                modifier = Modifier.size(28.dp)
                             )
                         }
                     },
@@ -149,12 +155,12 @@ fun CityListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp),
-                    placeholder = { Text("Şehir ara (Örn: İstanbul)...", color = Color.White.copy(alpha = 0.5f)) },
+                    placeholder = { Text("Şehir ara (Örn: İstanbul)...", color = if (isDarkTheme) Color.White.copy(alpha = 0.5f) else Color(0xFF64748B)) },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = "Ara",
-                            tint = Color.White.copy(alpha = 0.8f)
+                            tint = if (isDarkTheme) Color.White.copy(alpha = 0.8f) else Color(0xFF334155)
                         )
                     },
                     trailingIcon = {
@@ -163,18 +169,18 @@ fun CityListScreen(
                                 Icon(
                                     imageVector = Icons.Default.Clear,
                                     contentDescription = "Temizle",
-                                    tint = Color.White.copy(alpha = 0.8f)
+                                    tint = if (isDarkTheme) Color.White.copy(alpha = 0.8f) else Color(0xFF334155)
                                 )
                             }
                         }
                     },
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.White.copy(alpha = 0.1f),
-                        unfocusedContainerColor = Color.White.copy(alpha = 0.07f),
-                        focusedBorderColor = Color(0xFF38BDF8),
-                        unfocusedBorderColor = Color.White.copy(alpha = 0.18f),
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.White
+                        focusedContainerColor = if (isDarkTheme) Color.White.copy(alpha = 0.1f) else Color.White,
+                        unfocusedContainerColor = if (isDarkTheme) Color.White.copy(alpha = 0.07f) else Color.White.copy(alpha = 0.8f),
+                        focusedBorderColor = Color(0xFF0284C7),
+                        unfocusedBorderColor = if (isDarkTheme) Color.White.copy(alpha = 0.18f) else Color(0xFFCBD5E1),
+                        focusedTextColor = if (isDarkTheme) Color.White else Color(0xFF0F172A),
+                        unfocusedTextColor = if (isDarkTheme) Color.White else Color(0xFF0F172A)
                     ),
                     shape = RoundedCornerShape(20.dp),
                     singleLine = true
@@ -198,7 +204,7 @@ fun CityListScreen(
                         Text(
                             text = "Aramanızla eşleşen şehir bulunamadı",
                             style = MaterialTheme.typography.titleMedium,
-                            color = Color.White.copy(alpha = 0.7f),
+                            color = if (isDarkTheme) Color.White.copy(alpha = 0.7f) else Color(0xFF475569),
                             textAlign = TextAlign.Center
                         )
                     }
@@ -235,7 +241,7 @@ fun CityListScreen(
                                 isSelected = isSelected,
                                 onClick = {
                                     selectedCityName = if (isSelected) null else city.cityName
-                                    selectedCityForDetail = city
+                                    selectedCityDetailName = city.cityName
                                     Log.d("Şehir tıklandı", city.cityName)
                                 }
                             )
@@ -252,6 +258,11 @@ fun ConnectionErrorContent(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isDarkTheme = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val containerColor = if (isDarkTheme) Color.White.copy(alpha = 0.08f) else Color.White
+    val textColor = if (isDarkTheme) Color.White else Color(0xFF0F172A)
+    val subColor = if (isDarkTheme) Color.White.copy(alpha = 0.7f) else Color(0xFF475569)
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -260,10 +271,10 @@ fun ConnectionErrorContent(
     ) {
         Card(
             colors = CardDefaults.cardColors(
-                containerColor = Color.White.copy(alpha = 0.08f)
+                containerColor = containerColor
             ),
             shape = RoundedCornerShape(28.dp),
-            border = BorderStroke(1.dp, Color.White.copy(alpha = 0.18f)),
+            border = BorderStroke(1.dp, if (isDarkTheme) Color.White.copy(alpha = 0.18f) else Color(0xFFCBD5E1)),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -275,7 +286,7 @@ fun ConnectionErrorContent(
             ) {
                 Surface(
                     shape = CircleShape,
-                    color = Color.White.copy(alpha = 0.12f),
+                    color = if (isDarkTheme) Color.White.copy(alpha = 0.12f) else Color(0xFFE0F2FE),
                     modifier = Modifier.size(72.dp)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
@@ -291,14 +302,14 @@ fun ConnectionErrorContent(
                 Text(
                     text = "Opss. Bağlantı hatası oldu",
                     style = MaterialTheme.typography.titleLarge,
-                    color = Color.White,
+                    color = textColor,
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "Lütfen internet bağlantınızı kontrol edip tekrar deneyin.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = Color.White.copy(alpha = 0.7f),
+                    color = subColor,
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(24.dp))

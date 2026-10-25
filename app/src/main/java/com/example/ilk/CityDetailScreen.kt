@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,18 +53,17 @@ fun CityDetailScreen(
 
     val weatherCode = detailResponse?.currentWeather?.weathercode ?: 0
     val isDay = (detailResponse?.currentWeather?.isDay ?: 1) == 1
+    val isDarkTheme = MaterialTheme.colorScheme.background.luminance() < 0.5f
     
-    // Yükleme veya Hata anında nötr gece mavisi; veri başarıyla geldiğinde havanın gerçek rengi
+    // Yükleme veya Hata anında aktif temaya uygun nötr zemin; veri başarıyla geldiğinde havanın gerçek rengi
     val backgroundGradient = if (isLoading || isError || detailResponse == null) {
-        Brush.verticalGradient(
-            colors = listOf(
-                Color(0xFF0F172A),
-                Color(0xFF1E293B),
-                Color(0xFF020617)
-            )
-        )
+        if (isDarkTheme) {
+            Brush.verticalGradient(colors = listOf(Color(0xFF0F172A), Color(0xFF1E293B), Color(0xFF020617)))
+        } else {
+            Brush.verticalGradient(colors = listOf(Color(0xFFF0F9FF), Color(0xFFE0F2FE), Color(0xFFBAE6FD)))
+        }
     } else {
-        getWeatherGradient(weatherCode, isDay)
+        getWeatherGradient(weatherCode, isDay, isDarkTheme)
     }
 
     Box(
@@ -77,21 +77,27 @@ fun CityDetailScreen(
                 TopAppBar(
                     title = {
                         Column {
-                            Text(text = city.cityName, style = MaterialTheme.typography.titleLarge, color = Color.White)
+                            Text(text = city.cityName, style = MaterialTheme.typography.titleLarge, color = if (isDarkTheme) Color.White else Color(0xFF0F172A))
                             Text(
                                 text = "Türkiye",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = Color.White.copy(alpha = 0.7f)
+                                color = if (isDarkTheme) Color.White.copy(alpha = 0.7f) else Color(0xFF475569)
                             )
                         }
                     },
                     actions = {
                         // Geri gitme tuşu yerine + Butonu (Diğer Şehirler)
-                        IconButton(onClick = onOpenCityList) {
+                        IconButton(
+                            onClick = {
+                                android.util.Log.d("CityDetailScreen", "+ butonuna tıklandı")
+                                onOpenCityList()
+                            },
+                            modifier = Modifier.size(48.dp)
+                        ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
                                 contentDescription = "Şehir Ekle / Ara",
-                                tint = Color.White,
+                                tint = if (isDarkTheme) Color.White else Color(0xFF0F172A),
                                 modifier = Modifier.size(28.dp)
                             )
                         }
@@ -112,7 +118,7 @@ fun CityDetailScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator(color = Color.White)
+                        CircularProgressIndicator(color = if (isDarkTheme) Color.White else Color(0xFF0284C7))
                     }
                 } else if (isError || detailResponse == null) {
                     ConnectionErrorContent(
@@ -137,9 +143,9 @@ fun CityDetailScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(28.dp),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = Color.White.copy(alpha = 0.1f)
+                                    containerColor = if (isDarkTheme) Color.White.copy(alpha = 0.1f) else Color.White
                                 ),
-                                border = BorderStroke(1.dp, Color.White.copy(alpha = 0.2f))
+                                border = BorderStroke(1.dp, if (isDarkTheme) Color.White.copy(alpha = 0.2f) else Color(0xFFCBD5E1))
                             ) {
                                 Column(
                                     modifier = Modifier
@@ -159,13 +165,13 @@ fun CityDetailScreen(
                                             fontSize = 68.sp,
                                             fontWeight = FontWeight.Bold
                                         ),
-                                        color = Color.White
+                                        color = if (isDarkTheme) Color.White else Color(0xFF0F172A)
                                     )
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Text(
                                         text = conditionText,
                                         style = MaterialTheme.typography.titleMedium,
-                                        color = Color.White.copy(alpha = 0.85f)
+                                        color = if (isDarkTheme) Color.White.copy(alpha = 0.85f) else Color(0xFF475569)
                                     )
                                 }
                             }
@@ -199,7 +205,7 @@ fun CityDetailScreen(
                                 text = "Saatlik Tahmin",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White
+                                color = if (isDarkTheme) Color.White else Color(0xFF0F172A)
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                             val hourlyTemps = detail.hourly?.temperature2m?.take(24) ?: emptyList()
@@ -213,9 +219,9 @@ fun CityDetailScreen(
                                     Card(
                                         shape = RoundedCornerShape(20.dp),
                                         colors = CardDefaults.cardColors(
-                                            containerColor = Color.White.copy(alpha = 0.08f)
+                                            containerColor = if (isDarkTheme) Color.White.copy(alpha = 0.08f) else Color.White
                                         ),
-                                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.15f))
+                                        border = BorderStroke(1.dp, if (isDarkTheme) Color.White.copy(alpha = 0.15f) else Color(0xFFCBD5E1))
                                     ) {
                                         Column(
                                             modifier = Modifier.padding(14.dp),
@@ -224,7 +230,7 @@ fun CityDetailScreen(
                                             Text(
                                                 text = String.format("%02d:00", index),
                                                 style = MaterialTheme.typography.labelMedium,
-                                                color = Color.White.copy(alpha = 0.8f)
+                                                color = if (isDarkTheme) Color.White.copy(alpha = 0.8f) else Color(0xFF475569)
                                             )
                                             Spacer(modifier = Modifier.height(8.dp))
                                             WeatherAnimation(
@@ -237,7 +243,7 @@ fun CityDetailScreen(
                                                 text = "${hourTemp.toInt()}°C",
                                                 style = MaterialTheme.typography.titleSmall,
                                                 fontWeight = FontWeight.Bold,
-                                                color = Color.White
+                                                color = if (isDarkTheme) Color.White else Color(0xFF0F172A)
                                             )
                                         }
                                     }
@@ -251,7 +257,7 @@ fun CityDetailScreen(
                                 text = "7 Günlük Tahmin",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White
+                                color = if (isDarkTheme) Color.White else Color(0xFF0F172A)
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                             val maxTemps = detail.daily?.tempMax ?: emptyList()
@@ -261,9 +267,9 @@ fun CityDetailScreen(
                             Card(
                                 shape = RoundedCornerShape(24.dp),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = Color.White.copy(alpha = 0.08f)
+                                    containerColor = if (isDarkTheme) Color.White.copy(alpha = 0.08f) else Color.White
                                 ),
-                                border = BorderStroke(1.dp, Color.White.copy(alpha = 0.15f))
+                                border = BorderStroke(1.dp, if (isDarkTheme) Color.White.copy(alpha = 0.15f) else Color(0xFFCBD5E1))
                             ) {
                                 Column(
                                     modifier = Modifier.padding(18.dp),
@@ -282,7 +288,7 @@ fun CityDetailScreen(
                                             Text(
                                                 text = if (i == 0) "Bugün" else "${i + 1}. Gün",
                                                 style = MaterialTheme.typography.bodyMedium,
-                                                color = Color.White,
+                                                color = if (isDarkTheme) Color.White else Color(0xFF0F172A),
                                                 modifier = Modifier.width(80.dp)
                                             )
                                             WeatherAnimation(
@@ -293,7 +299,7 @@ fun CityDetailScreen(
                                             Text(
                                                 text = parseWeatherCodeToText(dayCode),
                                                 style = MaterialTheme.typography.bodySmall,
-                                                color = Color.White.copy(alpha = 0.7f),
+                                                color = if (isDarkTheme) Color.White.copy(alpha = 0.7f) else Color(0xFF475569),
                                                 modifier = Modifier.weight(1f),
                                                 textAlign = TextAlign.Center
                                             )
@@ -301,7 +307,7 @@ fun CityDetailScreen(
                                                 text = "$maxT° / $minT°",
                                                 style = MaterialTheme.typography.bodyMedium,
                                                 fontWeight = FontWeight.Bold,
-                                                color = Color.White
+                                                color = if (isDarkTheme) Color.White else Color(0xFF0F172A)
                                             )
                                         }
                                     }
@@ -336,14 +342,14 @@ fun WeatherStatGlassCard(
         ) {
             Surface(
                 shape = CircleShape,
-                color = Color.White.copy(alpha = 0.12f),
+                color = Color.White.copy(alpha = 0.25f), // Daha net ve belirgin daire zemin
                 modifier = Modifier.size(44.dp)
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = Color(0xFF38BDF8),
+                        tint = Color.White, // Saf beyaz ikon ile maksimum netlik
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -353,7 +359,7 @@ fun WeatherStatGlassCard(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color.White.copy(alpha = 0.7f)
+                    color = Color.White.copy(alpha = 0.8f)
                 )
                 Text(
                     text = value,

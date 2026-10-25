@@ -12,23 +12,44 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
- * Weather Codes & Colors (Open-Meteo WMO Codes):
- * - 0: Clear Sky / Güneşli -> Sıcak Altın Kehribar (Amber) & Turuncu
- * - 1, 2: Az / Parçalı Bulutlu -> Berrak Gökyüzü Mavisı
- * - 3, 45, 48: Bulutlu / Sisli -> Koyu Dumanlı Mavi-Gri
- * - 51..82: Yağmurlu / Sağanak -> Sakinleştirici Derin Lacivert Yağmur Tonu
- * - 71..86: Karlı -> Soğuk Buz Mavisı
- * - 95..99: Fırtınalı -> Elektrik Mor Fırtına
+ * Tema ve Hava Koşullarına Göre Değişen Akışkan Gradientler (Dark & Light Mode Desteği):
  */
-fun getWeatherGradient(weatherCode: Int, isDay: Boolean = true): Brush {
+fun getWeatherGradient(weatherCode: Int, isDay: Boolean = true, isDarkTheme: Boolean = true): Brush {
+    if (!isDarkTheme) {
+        // Açık Tema (Light Mode) Ferah Gökyüzü Gradientleri
+        return when (weatherCode) {
+            0 -> Brush.verticalGradient(
+                colors = listOf(
+                    Color(0xFF38BDF8), // Parlak Gündüz Mavisı
+                    Color(0xFF7DD3FC), // Yumuşak Mavi
+                    Color(0xFFF0F9FF)  // Açık Beyazımsı Zemin
+                )
+            )
+            in 51..82 -> Brush.verticalGradient(
+                colors = listOf(
+                    Color(0xFF64748B), // Slate Yağmur Grisi
+                    Color(0xFF94A3B8),
+                    Color(0xFFF1F5F9)
+                )
+            )
+            else -> Brush.verticalGradient(
+                colors = listOf(
+                    Color(0xFF7DD3FC),
+                    Color(0xFFBAE6FD),
+                    Color(0xFFF8FAFC)
+                )
+            )
+        }
+    }
+
+    // Koyu Tema (Dark Mode) Gradientleri
     return when (weatherCode) {
-        // 0: Tam Güneşli / Açık (Sıcak Altın Kehribar & Turuncu)
         0 -> if (isDay) {
             Brush.verticalGradient(
                 colors = listOf(
-                    Color(0xFFD97706), // Sıcak Kehribar Altın
-                    Color(0xFFB45309), // Turuncu Güneş
-                    Color(0xFF0F172A)  // Derin Taban
+                    Color(0xFFD97706),
+                    Color(0xFFB45309),
+                    Color(0xFF0F172A)
                 )
             )
         } else {
@@ -41,13 +62,12 @@ fun getWeatherGradient(weatherCode: Int, isDay: Boolean = true): Brush {
             )
         }
 
-        // 1, 2: Az / Parçalı Bulutlu (Berrak Gökyüzü Mavisi)
         1, 2 -> if (isDay) {
             Brush.verticalGradient(
                 colors = listOf(
-                    Color(0xFF0284C7), // Berrak Gökyüzü Mavisi
-                    Color(0xFF0369A1), // Mavi
-                    Color(0xFF0C4A6E)  // Koyu Mavi
+                    Color(0xFF0284C7),
+                    Color(0xFF0369A1),
+                    Color(0xFF0C4A6E)
                 )
             )
         } else {
@@ -60,43 +80,38 @@ fun getWeatherGradient(weatherCode: Int, isDay: Boolean = true): Brush {
             )
         }
 
-        // 3, 45, 48: Bulutlu / Sisli (Koyu Füme & Kömür Grisi)
         3, 45, 48 -> Brush.verticalGradient(
             colors = listOf(
-                Color(0xFF334155), // Füme Gri
-                Color(0xFF1E293B), // Koyu Slate
-                Color(0xFF0F172A)  // Taban
+                Color(0xFF334155),
+                Color(0xFF1E293B),
+                Color(0xFF0F172A)
             )
         )
 
-        // 51..82: Yağmurlu / Sağanak / Çiseleyen (Derin Lacivert Yağmur)
         in 51..82 -> Brush.verticalGradient(
             colors = listOf(
-                Color(0xFF1E1B4B), // Derin Gece Yağmuru
-                Color(0xFF312E81), // Fırtına Laciverti
-                Color(0xFF0F172A)  // Koyu Taban
+                Color(0xFF1E1B4B),
+                Color(0xFF312E81),
+                Color(0xFF0F172A)
             )
         )
 
-        // 71..86: Karlı (Soğuk Buz Siyan Mavisi)
         in 71..86 -> Brush.verticalGradient(
             colors = listOf(
-                Color(0xFF0891B2), // Buz Mavisı
-                Color(0xFF0E7490), // Glasiyer Tonu
-                Color(0xFF164E63)  // Koyu Kış Laciverti
+                Color(0xFF0891B2),
+                Color(0xFF0E7490),
+                Color(0xFF164E63)
             )
         )
 
-        // 95..99: Fırtınalı (Elektrik Fırtına Moru)
         in 95..99 -> Brush.verticalGradient(
             colors = listOf(
-                Color(0xFF581C87), // Elektrik Mor
-                Color(0xFF3B0764), // Derin Mor
-                Color(0xFF0F172A)  // Siyah
+                Color(0xFF581C87),
+                Color(0xFF3B0764),
+                Color(0xFF0F172A)
             )
         )
 
-        // Diğer Durumlar
         else -> Brush.verticalGradient(
             colors = listOf(
                 Color(0xFF0F172A),
