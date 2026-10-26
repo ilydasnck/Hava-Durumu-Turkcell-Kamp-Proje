@@ -9,8 +9,9 @@ Jetpack Compose, Clean Architecture (3-Katmanlı Mimari) ve Material Design 3 pr
       <sub><b>Hava Durumu Detay</b></sub>
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/3b10afb8-47bf-4647-9305-35a2b7a5d9eb" width="180" alt="Şehir Listesi" /><br />
-      <sub><b>Şehir Listesi (Koyu)</b></sub>
+      <img src="<img width="1080" height="2400" alt="Screenshot_20261026_093513" src="https://github.com/user-attachments/assets/d3e22ea1-c16e-4e75-a7b2-8cd274ffb1b7" />
+" width="180" alt="Şehir Listesi" /><br />
+      <sub><b>Şehir Listesi</b></sub>
     </td>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/e2bdd59d-6393-44c1-95a5-77d734855519" width="180" alt="Şehir Arama" /><br />
