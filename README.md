@@ -1,53 +1,70 @@
-# 🌤️ Modern Hava Durumu Uygulaması (Weather App)
+# Hava Durumu (Weather App)
 
-Jetpack Compose, Clean Architecture (3-Katmanlı Mimari) ve Material Design 3 ilkelerine uygun olarak geliştirilmiş, Türkiye'nin 81 ilinin anlık, saatlik ve 7 günlük hava durumu verilerini sunan modern bir Android uygulaması.
-<img width="1080" height="2400" alt="Screenshot_20261026_092255" src="https://github.com/user-attachments/assets/e6129721-a584-409b-bb3d-ecff202dcdf4" />
-<img width="1080" height="2400" alt="Screenshot_20261026_092724" src="https://github.com/user-attachments/assets/3b10afb8-47bf-4647-9305-35a2b7a5d9eb" />
-<img width="1080" height="2400" alt="Screenshot_20261026_092724" src="https://github.com/user-attachments/assets/e2bdd59d-6393-44c1-95a5-77d734855519" />
-<img width="1080" height="2400" alt="Screenshot_20261026_092724" src="https://github.com/user-attachments/assets/d5088109-5157-4ed6-b19c-8e4924d633a7" />
-<img width="1080" height="2400" alt="image" src="https://github.com/user-attachments/assets/9f3fc813-fe6f-483d-af99-18dfdc4894f2" />
+Jetpack Compose, Clean Architecture (3-Katmanlı Mimari) ve Material Design 3 prensiplerine uygun olarak geliştirilmiş; Türkiye'nin 81 ilinin anlık, saatlik ve 7 günlük hava durumu verilerini sunan modern bir Android uygulaması.
 
-
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/e6129721-a584-409b-bb3d-ecff202dcdf4" width="180" alt="Hava Durumu Detay" /><br />
+      <sub><b>Hava Durumu Detay</b></sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/3b10afb8-47bf-4647-9305-35a2b7a5d9eb" width="180" alt="Şehir Arama ve Keşfet" /><br />
+      <sub><b>Şehir Arama & Keşfet</b></sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/e2bdd59d-6393-44c1-95a5-77d734855519" width="180" alt="Açık Tema Modu" /><br />
+      <sub><b>Açık Tema Modu</b></sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/d5088109-5157-4ed6-b19c-8e4924d633a7" width="180" alt="Uygulama Ayarları" /><br />
+      <sub><b>Uygulama Ayarları</b></sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/9f3fc813-fe6f-483d-af99-18dfdc4894f2" width="180" alt="Ana Ekran Widget'ı" /><br />
+      <sub><b>Ana Ekran Widget'ı</b></sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
-## ✨ Özellikler
+## Özellikler
 
-- **🇹🇷 Türkiye'nin 81 İli**: Tüm iller koordinatlarıyla hazır tanımlı, hızlı arama ve filtreleme olanağı.
-- **🌦️ Anlık, Saatlik & 7 Günlük Tahmin**: Open-Meteo API entegrasyonu ile canlı rüzgar hızı, nem oranı, saatlik sıcaklık ve 7 günlük tahmin verileri.
-- **💎 Glassmorphism & Akışkan Gradientler**: Hava durumuna (güneşli, karlı, yağmurlu, fırtınalı) göre dinamik değişen renk psikolojisi ve cam efekti kartlar.
-- **🌗 Açık & Koyu Tema Desteği**: Kullanıcı tercihine veya sistem ayarına duyarlı, yüksek kontrastlı tema seçeneği.
-- **📱 Ana Ekran Widget'ı (Jetpack Glance)**: Varsayılan şehrinizin canlı hava durumunu ve animasyonlu emojisini ana ekranınızda gösteren widget.
-- **🚀 3-Katmanlı Mimarisi (Clean Architecture)**: `UI` (Compose + ViewModel + StateFlow) -> `Data` (Repository + Retrofit) -> `Model` ayrımı.
-- **📱 Onboarding Akışı**: Uygulamayı ilk kez açan kullanıcılar için 3 adımlı karşılama ve varsayılan şehir seçim ekranı.
-- **⚙️ Gelişmiş Ayarlar Menüsü**: Varsayılan şehri canlı aramayla değiştirebilme ve tema yönetimi.
-- **🔄 Ekran Döndürme Desteği**: `rememberSaveable` ve state preservation ile ekran yatay/dikey döndürüldüğünde durum kaybı yaşanmaz.
-- **🛡️ Kesintisiz Çalışma (Fallback) Garantisi**: Ağ gecikmelerinde veya sunucu kısıtlamalarında çökme/hata yerine otomatik akıllı yedekleme mekanizması.
+- **Türkiye'nin 81 İli**: Tüm iller koordinatlarıyla önceden tanımlanmıştır; anlık arama ve filtreleme desteklenir.
+- **Anlık, Saatlik ve 7 Günlük Tahmin**: Open-Meteo API entegrasyonu ile rüzgar hızı, nem oranı, saatlik sıcaklıklar ve 7 günlük tahmin verileri sunulur.
+- **Glassmorphism & Dinamik Gradientler**: Hava durumuna göre değişkenlik gösteren renk paletleri ve yarı saydam cam tasarımı.
+- **Açık & Koyu Tema Desteği**: Kullanıcı tercihine göre kolayca geçiş yapılabilen sistem ve uygulama temaları.
+- **Ana Ekran Widget'ı (Jetpack Glance)**: Varsayılan şehrin anlık durumunu ve emojisini gösteren, dokunulduğunda uygulamayı başlatan widget.
+- **3-Katmanlı Mimarisi (Clean Architecture)**: `UI` (Compose + ViewModel + StateFlow) -> `Data` (Repository + Retrofit) -> `Model` mimarisi.
+- **Onboarding Akışı**: İlk kurulumda kullanıcıyı karşılayan 3 adımlı bilgilendirme ve varsayılan şehir seçim ekranı.
+- **Dinamik Ayarlar Menüsü**: Varsayılan şehri arama yaparak güncelleyebilme ve tema yönetimi.
+- **Ekran Döndürme Uyumlu**: `rememberSaveable` ve State preservation ile cihaz döndürme işlemlerinde durum kaybı yaşanmaz.
 
 ---
 
-## 🏗️ Proje Mimarisi
+## Proje Mimarisi
 
-Uygulama, sürdürülebilir ve test edilebilir **3-Katmanlı Mimarisi (Clean Architecture)** ile geliştirilmiştir:
+Uygulama, ölçeklenebilir ve sürdürülebilir **Clean Architecture (3-Katmanlı Mimari)** prensiplerine göre yapılandırılmıştır:
 
 ```text
 com.example.ilk
 ├── MainActivity.kt            # Uygulama Giriş Noktası & Tema Yönetimi
 ├── WeatherWidget.kt           # Jetpack Glance Ana Ekran Widget'ı
 │
-├── model/                     # MİMARİ KATMAN 1: Veri Modelleri
-│   ├── City.kt                # Şehir ve koordinat veri modelleri
-│   ├── Forecast.kt            # Anlık, saatlik ve günlük hava durumu modelleri
-│   └── WeatherCondition.kt    # WMO Hava kodlarından Türkçe metin ve emoji dönüşümleri
+├── model/                     # Katman 1: Veri Modelleri
+│   ├── City.kt                # Şehir ve koordinat veri sınıfları
+│   ├── Forecast.kt            # Anlık, saatlik ve günlük hava durumu veri modelleri
+│   └── WeatherCondition.kt    # WMO kodlarından Türkçe metin ve emoji dönüşümleri
 │
-├── data/                      # MİMARİ KATMAN 2: Veri Kaynakları & Repositories
+├── data/                      # Katman 2: Veri Kaynakları & Repositories
 │   ├── ApiClient.kt           # Singleton Retrofit istemcisi
 │   ├── ForecastApi.kt         # Open-Meteo REST API arayüzü
-│   ├── CityRepository.kt      # 81 İl koordinat deposu ve şehir arama
-│   └── WeatherRepository.kt   # Hava durumu veri çekme ve yedekleme (fallback) deposu
+│   ├── CityRepository.kt      # 81 İl koordinat verisi ve şehir arama
+│   └── WeatherRepository.kt   # Hava durumu veri çekme ve yedekleme deposu
 │
-└── ui/                        # MİMARİ KATMAN 3: Kullanıcı Arayüzü & ViewModel
-    ├── LoadState.kt           # Sealed Class (Loading, Success, Error, Empty)
+└── ui/                        # Katman 3: Kullanıcı Arayüzü & ViewModel
+    ├── LoadState.kt           # Mühürlü Sınıf (Loading, Success, Error, Empty)
     ├── city/                  # CityScreen, CityViewModel, CityCard
     ├── forecast/              # ForecastScreen, ForecastViewModel
     ├── settings/              # SettingsScreen
@@ -58,27 +75,27 @@ com.example.ilk
 
 ---
 
-## 🛠️ Kullanılan Teknolojiler
+## Kullanılan Teknolojiler
 
 | Bileşen | Teknoloji / Kütüphane |
 | :--- | :--- |
-| **Dil** | Kotlin (100% Idiomatic) |
-| **Arayüz (UI)** | Jetpack Compose, Material 3, Canvas Graphics |
-| **Arayüz Durumu (State)** | ViewModel, StateFlow, `rememberSaveable` |
-| **Ağ (Networking)** | Retrofit 2, Gson Converter, OkHttp |
+| **Programlama Dili** | Kotlin |
+| **Kullanıcı Arayüzü (UI)** | Jetpack Compose, Material Design 3, Canvas |
+| **Mimari & Durum Yönetimi** | ViewModel, StateFlow, `rememberSaveable` |
+| **Ağ İstemcisi** | Retrofit 2, Gson Converter, OkHttp |
 | **Ana Ekran Widget** | Jetpack Glance (`androidx.glance:glance-appwidget`) |
-| **Asenkron Programlama** | Kotlin Coroutines (`Dispatchers.IO`), Flow |
-| **Veri Saklama** | SharedPreferences (`OnboardingManager`) |
-| **Derleme Sistemi** | Gradle (Kotlin DSL) |
+| **Eşzamanlılık** | Kotlin Coroutines (`Dispatchers.IO`), Flow |
+| **Veri Saklama** | SharedPreferences |
+| **Derleme Araçları** | Gradle (Kotlin DSL) |
 
 ---
 
-## 📡 API Entegrasyonu
+## API Bilgisi
 
-Uygulama, ücretsiz ve API anahtarı gerektirmeyen [Open-Meteo Weather API](https://open-meteo.com/) servisini kullanır:
+Uygulama, [Open-Meteo Weather API](https://open-meteo.com/) servisini kullanmaktadır:
 
 - **Endpoint**: `GET https://api.open-meteo.com/v1/forecast`
-- **Sorgu Parametreleri**:
+- **Parametreler**:
   - `latitude`, `longitude`
   - `current_weather=true`
   - `hourly=temperature_2m,relative_humidity_2m`
@@ -87,18 +104,17 @@ Uygulama, ücretsiz ve API anahtarı gerektirmeyen [Open-Meteo Weather API](http
 
 ---
 
-## 🚀 Kurulum ve Çalıştırma
+## Kurulum ve Çalıştırma
 
-1. Projeyi klonlayın veya Android Studio ile açın:
+1. Repozitörü klonlayın:
    ```bash
    git clone <repository-url>
    ```
-2. Android Studio (Ladybug veya üzeri) ile projeyi Senkronize edin (`Gradle Sync`).
-3. Bir emülatör veya fiziksel Android cihaz bağlayın.
-4. Uygulamayı çalıştırın (`Shift + F10` veya `app:assembleDebug`).
+2. Projeyi Android Studio (Ladybug veya güncel sürüm) ile açıp `Gradle Sync` yapın.
+3. Çalıştırma konfigürasyonunu seçerek uygulamayı başlatın (`Shift + F10`).
 
 ---
 
-## 📜 Lisans
+## Lisans
 
-Bu proje MIT Lisansı ile lisanslanmıştır. Dilediğiniz gibi geliştirebilir ve kullanabilirsiniz.
+Bu proje MIT Lisansı altında sunulmuştur.
