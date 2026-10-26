@@ -17,6 +17,7 @@ Jetpack Compose, Clean Architecture (3-Katmanlı Mimari) ve Material Design 3 pr
       <sub><b>Hava Durumu Detay</b></sub>
     </td>
     <td align="center">
+      <img width="1080" height="2400" src="https://github.com/user-attachments/assets/5ee16190-5531-4f06-8d7b-05e63a4b2560"  width="180" alt="Uygulama Ayarları" />
       <img src="https://github.com/user-attachments/assets/d5088109-5157-4ed6-b19c-8e4924d633a7" width="180" alt="Uygulama Ayarları" /><br />
       <sub><b>Uygulama Ayarları</b></sub>
     </td>
