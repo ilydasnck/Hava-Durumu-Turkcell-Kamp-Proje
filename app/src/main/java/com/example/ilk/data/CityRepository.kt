@@ -1,16 +1,9 @@
-package com.example.ilk
+package com.example.ilk.data
 
-import android.util.Log
+import com.example.ilk.model.City
+import com.example.ilk.model.CityCoordinates
 
-data class CityCoordinates(
-    val name: String,
-    val country: String,
-    val latitude: Double,
-    val longitude: Double
-)
-
-class WeatherRepository {
-    // Türkiye'nin 81 ili alfabetik sırada ve koordinatları
+class CityRepository {
     private val turkishProvinces = listOf(
         CityCoordinates("Adana", "Türkiye", 37.0, 35.32),
         CityCoordinates("Adıyaman", "Türkiye", 37.76, 38.27),
@@ -95,9 +88,9 @@ class WeatherRepository {
         CityCoordinates("Zonguldak", "Türkiye", 41.45, 31.79)
     )
 
-    fun getTurkishCities(): List<CityWeather> {
+    fun getTurkishCities(): List<City> {
         return turkishProvinces.map {
-            CityWeather(
+            City(
                 cityName = it.name,
                 latitude = it.latitude,
                 longitude = it.longitude,
@@ -110,71 +103,5 @@ class WeatherRepository {
 
     fun getCityCoordinates(cityName: String): CityCoordinates? {
         return turkishProvinces.find { it.name.equals(cityName, ignoreCase = true) }
-    }
-
-    suspend fun fetchWeatherForCity(lat: Double, lon: Double): Pair<String, String> {
-        return try {
-            val response = ApiClient.forecastApi.getWeather(lat, lon)
-            val cw = response.currentWeather
-            val temp = cw?.temperature ?: 0.0
-            val code = cw?.weathercode ?: 0
-            val conditionText = parseWeatherCodeToText(code)
-            Pair("${temp.toInt()}°C", conditionText)
-        } catch (e: Exception) {
-            Log.e("WeatherApiError", "Error fetching city weather: ${e.message}", e)
-            Pair("N/A", "Bağlantı Hatası")
-        }
-    }
-
-    suspend fun fetchDetailedWeather(lat: Double, lon: Double): WeatherDetailResponse? {
-        return try {
-            val response = ApiClient.forecastApi.getDetailWeather(lat, lon)
-            if (response.currentWeather != null) {
-                response
-            } else {
-                fetchFallbackWeather(lat, lon)
-            }
-        } catch (e: Exception) {
-            Log.e("WeatherApiError", "Detail fetch failed, falling back: ${e.message}", e)
-            fetchFallbackWeather(lat, lon)
-        }
-    }
-
-    private suspend fun fetchFallbackWeather(lat: Double, lon: Double): WeatherDetailResponse? {
-        return try {
-            val basicResponse = ApiClient.forecastApi.getWeather(lat, lon)
-            val cw = basicResponse.currentWeather
-            if (cw != null) {
-                val realCode = cw.weathercode ?: 0
-                WeatherDetailResponse(
-                    latitude = lat,
-                    longitude = lon,
-                    currentWeather = CurrentWeatherDetail(
-                        temperature = cw.temperature,
-                        windspeed = 12.0,
-                        winddirection = 180.0,
-                        weathercode = realCode,
-                        isDay = 1
-                    ),
-                    hourly = HourlyWeatherDetail(
-                        time = List(24) { String.format("%02d:00", it) },
-                        temperature2m = List(24) { cw.temperature + (it % 3 - 1) },
-                        relativeHumidity2m = List(24) { (50 + (it % 10)).toDouble() },
-                        weathercode = List(24) { realCode }
-                    ),
-                    daily = DailyWeatherDetail(
-                        time = List(7) { "Day $it" },
-                        weathercode = List(7) { realCode },
-                        tempMax = List(7) { cw.temperature + 2 + it },
-                        tempMin = List(7) { cw.temperature - 3 - it }
-                    )
-                )
-            } else {
-                null
-            }
-        } catch (e: Exception) {
-            Log.e("WeatherApiError", "Fallback fetch failed: ${e.message}", e)
-            null
-        }
     }
 }

@@ -9,6 +9,9 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.ilk.ui.city.CityScreen
+import com.example.ilk.ui.onboarding.OnboardingManager
+import com.example.ilk.ui.onboarding.OnboardingScreen
 import com.example.ilk.ui.theme.IlkTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,7 +39,7 @@ class MainActivity : ComponentActivity() {
                         }
                     )
                 } else {
-                    CityListScreen(
+                    CityScreen(
                         onBackClick = { finish() },
                         onThemeChanged = {
                             themeMode = onboardingManager.getThemeMode()
@@ -46,29 +49,12 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("Lifecycle", "onStart")
-    }
-    override fun onResume() {
-        super.onResume()
-        Log.d("Lifecycle", "onResume")
-    }
-    override fun onPause() {
-        super.onPause()
-        Log.d("Lifecycle", "onPause")
-    }
-    override fun onStop() {
-        super.onStop()
-        Log.d("Lifecycle", "onStop")
-    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun MainActivityPreview() {
     IlkTheme {
-        CityListScreen(onBackClick = {}, onThemeChanged = {})
+        CityScreen(onBackClick = {}, onThemeChanged = {})
     }
 }

@@ -19,13 +19,18 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
+import com.example.ilk.data.ApiClient
+import com.example.ilk.data.CityRepository
+import com.example.ilk.model.CityCoordinates
+import com.example.ilk.model.parseWeatherCodeToText
+import com.example.ilk.ui.onboarding.OnboardingManager
 
 class WeatherWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val onboardingManager = OnboardingManager(context)
         val defaultCityName = onboardingManager.getDefaultCity()
 
-        val repository = WeatherRepository()
+        val repository = CityRepository()
         val cityCoords = repository.getCityCoordinates(defaultCityName)
             ?: CityCoordinates("İstanbul", "Türkiye", 41.00, 28.97)
 
@@ -37,7 +42,7 @@ class WeatherWidget : GlanceAppWidget() {
             val response = ApiClient.forecastApi.getWeather(cityCoords.latitude, cityCoords.longitude)
             val cw = response.currentWeather
             if (cw != null) {
-                tempStr = "${cw.temperature.toInt()}°C"
+                tempStr = "${cw.temperature?.toInt() ?: 0}°C"
                 weatherCode = cw.weathercode ?: 0
                 conditionText = parseWeatherCodeToText(weatherCode)
                 Log.d("WeatherWidget", "Fetched weather for $defaultCityName: $tempStr, $conditionText")
