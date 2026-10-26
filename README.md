@@ -5,16 +5,16 @@ Jetpack Compose, Clean Architecture (3-Katmanlı Mimari) ve Material Design 3 pr
 <table align="center">
   <tr>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/e6129721-a584-409b-bb3d-ecff202dcdf4" width="180" alt="Onboarding" /><br />
-      <sub><b>Onboarding</b></sub>
+      <img src="https://github.com/user-attachments/assets/e6129721-a584-409b-bb3d-ecff202dcdf4" width="180" alt="Hava Durumu Detay" /><br />
+      <sub><b>Hava Durumu Detay</b></sub>
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/3b10afb8-47bf-4647-9305-35a2b7a5d9eb" width="180" alt="Şehir detay" /><br />
-      <sub><b>Şehir Detay Sayfası</b></sub>
+      <img src="https://github.com/user-attachments/assets/3b10afb8-47bf-4647-9305-35a2b7a5d9eb" width="180" alt="Şehir Listesi" /><br />
+      <sub><b>Şehir Listesi (Koyu)</b></sub>
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/e2bdd59d-6393-44c1-95a5-77d734855519" width="180" alt="Açık Tema Modu" /><br />
-      <sub><b>Açık Tema Modu</b></sub>
+      <img src="https://github.com/user-attachments/assets/e2bdd59d-6393-44c1-95a5-77d734855519" width="180" alt="Şehir Arama" /><br />
+      <sub><b>Şehir Arama</b></sub>
     </td>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/d5088109-5157-4ed6-b19c-8e4924d633a7" width="180" alt="Uygulama Ayarları" /><br />
