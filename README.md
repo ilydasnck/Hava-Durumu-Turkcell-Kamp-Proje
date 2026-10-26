@@ -1,6 +1,13 @@
 # 🌤️ Modern Hava Durumu Uygulaması (Weather App)
 
 Jetpack Compose, Clean Architecture (3-Katmanlı Mimari) ve Material Design 3 ilkelerine uygun olarak geliştirilmiş, Türkiye'nin 81 ilinin anlık, saatlik ve 7 günlük hava durumu verilerini sunan modern bir Android uygulaması.
+<img width="1080" height="2400" alt="Screenshot_20261026_092255" src="https://github.com/user-attachments/assets/e6129721-a584-409b-bb3d-ecff202dcdf4" />
+<img width="1080" height="2400" alt="Screenshot_20261026_092724" src="https://github.com/user-attachments/assets/3b10afb8-47bf-4647-9305-35a2b7a5d9eb" />
+<img width="1080" height="2400" alt="Screenshot_20261026_092724" src="https://github.com/user-attachments/assets/e2bdd59d-6393-44c1-95a5-77d734855519" />
+<img width="1080" height="2400" alt="Screenshot_20261026_092724" src="https://github.com/user-attachments/assets/d5088109-5157-4ed6-b19c-8e4924d633a7" />
+<img width="1080" height="2400" alt="image" src="https://github.com/user-attachments/assets/9f3fc813-fe6f-483d-af99-18dfdc4894f2" />
+
+
 
 ---
 
