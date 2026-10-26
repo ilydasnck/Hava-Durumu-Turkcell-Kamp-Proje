@@ -5,16 +5,16 @@ Jetpack Compose, Clean Architecture (3-Katmanlı Mimari) ve Material Design 3 pr
 <table align="center">
   <tr>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/e6129721-a584-409b-bb3d-ecff202dcdf4" width="180" alt="Hava Durumu Detay" /><br />
-      <sub><b>Hava Durumu Detay</b></sub>
+      <img src="https://github.com/user-attachments/assets/e6129721-a584-409b-bb3d-ecff202dcdf4" width="180" alt="Onboarding Ekranı" /><br />
+      <sub><b>Onboarding</b></sub>
     </td>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/d3e22ea1-c16e-4e75-a7b2-8cd274ffb1b7" width="180" alt="Şehir Listesi" /><br />
       <sub><b>Şehir Listesi</b></sub>
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/e2bdd59d-6393-44c1-95a5-77d734855519" width="180" alt="Şehir Arama" /><br />
-      <sub><b>Şehir Arama</b></sub>
+      <img src="https://github.com/user-attachments/assets/e2bdd59d-6393-44c1-95a5-77d734855519" width="180" alt="Hava Durumu Detay" /><br />
+      <sub><b>Hava Durumu Detay</b></sub>
     </td>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/d5088109-5157-4ed6-b19c-8e4924d633a7" width="180" alt="Uygulama Ayarları" /><br />
