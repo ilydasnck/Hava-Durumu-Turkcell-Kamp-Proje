@@ -115,6 +115,3 @@ Uygulama, [Open-Meteo Weather API](https://open-meteo.com/) servisini kullanmakt
 
 ---
 
-## Lisans
-
-Bu proje MIT Lisansı altında sunulmuştur.
